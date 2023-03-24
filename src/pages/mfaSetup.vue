@@ -17,7 +17,7 @@ onMounted(async () => {
   document.body.className = 'dark'
   const id = route.params.id
   const url = getIframeURL(
-    import.meta.env?.NUXT_ENV_WALLET_URL || 'http://localhost:3000',
+    import.meta.env?.VITE_WALLET_URL || 'http://localhost:3000',
     `${id}/mfa/setup`
   )
   cleanUrl()
