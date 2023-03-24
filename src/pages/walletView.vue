@@ -12,11 +12,7 @@ let removeHandler: (() => void) | null = null
 onMounted(async () => {
   const id = useRoute().params.id as string
   const auth = new AuthProvider(id, {
-    network: {
-      authUrl: 'http://localhost:8080',
-      gatewayUrl: 'https://gateway-dev.arcana.network',
-      walletUrl: 'http://localhost:3000'
-    },
+    network: import.meta.env.VITE_SELF_ENV,
     alwaysVisible: true
   })
   await auth.init()
@@ -90,10 +86,4 @@ const handleRequest = async (
 }
 </script>
 
-<style scoped>
-iframe {
-  width: 120%;
-  max-width: 430px;
-}
-</style>
 
