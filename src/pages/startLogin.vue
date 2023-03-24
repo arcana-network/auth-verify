@@ -1,0 +1,91 @@
+<template>
+  <main class="center">
+    <iframe ref="v" />
+    <div v-if="!err" class="stack stack-space-4">
+      <Loading class="app-icon" />
+    </div>
+    <div v-else class="stack stack-space-4">
+      <img class="app-icon" src="../assets/error-icon.svg" />
+      <div class="stack stack-space-3">
+        <div class="stack stack-space-1">
+          <h1 class="text-center">Authorization Error</h1>
+          <h2 id="error-code" class="text-center">Error: {{ err }}</h2>
+        </div>
+      </div>
+    </div>
+  </main>
+</template>
+<script lang="ts" setup>
+import Loading from '../components/loadingSpinner.vue'
+import { encodeJSON } from '../helpers/utils'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+let err = ref('')
+
+onMounted(() => {
+  const route = useRoute()
+  document.body.className = 'dark'
+  const clientId = route.query.clientId as string
+  const loginType = route.query.type as string
+  const email = route.query.email as string
+  const loginSrc = route.query.loginSrc as string
+  if (!(clientId && loginType && loginSrc)) {
+    console.log('hello')
+    err.value = 'Missing params!'
+    return
+  }
+  if (!loginSrc) {
+    err.value = 'Login source required!'
+    return
+  }
+  const appId = clientId.split('_')[2]
+  if (loginType == 'passwordless') {
+    err.value = 'Not yet implemented'
+    return
+    //   this.auth.loginWithLink(email);
+  } else {
+    constructUrl({
+      loginSrc,
+      loginType,
+      appId,
+      parentUrl: window.location.href
+    })
+  }
+})
+
+const constructUrl = ({
+  loginType,
+  appId,
+  parentUrl,
+  loginSrc,
+  theme
+}: {
+  loginType: string
+  appId: string
+  parentUrl: string
+  loginSrc: string
+  theme?: string
+}) => {
+  const hash = encodeJSON({
+    loginType,
+    appId,
+    parentUrl,
+    theme: 'dark',
+    loginSrc
+  })
+
+  useRouter().push({
+    path: '/login/init',
+    hash: `#${hash}`
+  })
+}
+</script>
+
+<style>
+iframe {
+  height: 0;
+  width: 0;
+  border: 0;
+}
+</style>
