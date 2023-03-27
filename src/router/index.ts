@@ -7,7 +7,7 @@ import WalletPage from '../pages/walletView.vue'
 import MFAPage from '../pages/mfaSetup.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/init',
