@@ -34,9 +34,11 @@ onUnmounted(() => {
 
 const ReactNativeHandler = (auth: AuthProvider) => {
   const respond = (data: any) => {
+    console.log({ response: data })
     ;(window as any).ReactNativeWebView?.postMessage(JSON.stringify({ type: 'response', data }))
   }
   const eventHandler = (event: MessageEvent) => {
+    console.log({ request: event.data })
     handleRequest(event, auth, respond)
   }
   window.addEventListener('message', eventHandler)
@@ -47,9 +49,11 @@ const ReactNativeHandler = (auth: AuthProvider) => {
 
 const FlutterHandler = (auth: AuthProvider) => {
   const respond = (data: any) => {
+    console.log({ response: data })
     ;(window as any).xarFlutter?.postMessage(JSON.stringify({ type: 'response', data }))
   }
   const eventHandler = (event: MessageEvent) => {
+    console.log({ request: event.data })
     handleRequest(event, auth, respond)
   }
   window.addEventListener('message', eventHandler)
