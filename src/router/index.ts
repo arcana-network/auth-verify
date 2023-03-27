@@ -1,16 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginInitPage from '../pages/loginInit.vue'
+import LoginInitV1Page from '../pages/loginInitV1.vue'
 import StartPage from '../pages/startLogin.vue'
 import VerifyPage from '../pages/verifyLogin.vue'
 import WalletPage from '../pages/walletView.vue'
 import MFAPage from '../pages/mfaSetup.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/init',
-      name: 'home',
-      component: LoginInitPage
+      name: 'login-init-v1',
+      component: LoginInitV1Page
     },
     {
       path: '/start',
