@@ -2,7 +2,7 @@
   <main class="center">
     <iframe ref="iframeRef" />
     <div v-if="!err" class="stack stack-space-4">
-      <Loading stroke-color="#f7f7f7" class="app-icon" />
+      <Loading class="app-icon" />
     </div>
     <div v-else class="stack stack-space-4">
       <img class="app-icon" src="../assets/error-icon.svg" />

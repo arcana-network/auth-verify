@@ -29,7 +29,7 @@ function atobUTF8(str: string) {
 /**
  * Given a JSON-serializable object, encode as a Base64 string.
  */
-export function encodeJSON(options: JSON) {
+export function encodeJSON(options: any) {
   return btoaUTF8(JSON.stringify(options))
 }
 
