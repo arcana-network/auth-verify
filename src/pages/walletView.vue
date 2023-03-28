@@ -2,11 +2,12 @@
 <template></template>
 
 <script lang="ts" setup>
+import { CLIENT_STORAGE_KEY, type ClientKey } from '@/helpers/utils';
 import { AuthProvider } from '@arcana/auth'
 import { onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-let client = 'rn'
+let client: ClientKey = localStorage.getItem(CLIENT_STORAGE_KEY) as (ClientKey | null) || 'rn'
 let removeHandler: (() => void) | null = null
 
 onMounted(async () => {

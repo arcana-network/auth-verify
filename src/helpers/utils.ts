@@ -48,3 +48,6 @@ export function cleanUrl() {
 export function redirect(url: string) {
   setTimeout(() => (window.location.href = url))
 }
+
+export type ClientKey = 'rn' | 'flutter' | 'unity'
+export const CLIENT_STORAGE_KEY: ClientKey = 'rn'
