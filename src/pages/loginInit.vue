@@ -120,7 +120,7 @@ const replyToOpener = (data: any) => {
 }
 
 const getIframeUrl = (baseUrl: string, appId: string) => {
-  const url = new URL(`${baseUrl}/${appId}/init/`)
+  const url = new URL(`${appId}/v2/init/`, baseUrl);
   return url.toString()
 }
 </script>
