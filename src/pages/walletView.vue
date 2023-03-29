@@ -18,6 +18,9 @@ onMounted(async () => {
   })
   await auth.init()
   auth.provider.on('connect', () => {
+    const data = JSON.stringify({ type: 'login_complete' })
+      ; (window as any).ReactNativeWebView?.postMessage(data)
+      ; (window as any).xarFlutter?.postMessage(data)
     auth.showWallet()
     if (client == 'rn') {
       removeHandler = ReactNativeHandler(auth)
@@ -36,7 +39,7 @@ onUnmounted(() => {
 const ReactNativeHandler = (auth: AuthProvider) => {
   const respond = (data: any) => {
     console.log({ response: data })
-    ;(window as any).ReactNativeWebView?.postMessage(JSON.stringify({ type: 'response', data }))
+      ; (window as any).ReactNativeWebView?.postMessage(JSON.stringify({ type: 'response', data }))
   }
   const eventHandler = (event: MessageEvent) => {
     console.log({ request: event.data })
@@ -51,7 +54,7 @@ const ReactNativeHandler = (auth: AuthProvider) => {
 const FlutterHandler = (auth: AuthProvider) => {
   const respond = (data: any) => {
     console.log({ response: data })
-    ;(window as any).xarFlutter?.postMessage(JSON.stringify({ type: 'response', data }))
+      ; (window as any).xarFlutter?.postMessage(JSON.stringify({ type: 'response', data }))
   }
   const eventHandler = (event: MessageEvent) => {
     console.log({ request: event.data })
@@ -73,19 +76,23 @@ const handleRequest = async (
   if (data && data.type) {
     let result
     const { id, method } = data.data
-    switch (data.type) {
-      case 'request':
-        if (method === 'get_user_info') {
-          result = await auth.getUser()
-        } else {
-          result = await auth.provider.request(data.data)
-        }
-        respond({ result, id })
-        break
-      case 'logout':
-        await auth.logout()
-        respond({ result: 'logout_success', id })
-        break
+    try {
+      switch (data.type) {
+        case 'request':
+          if (method === 'get_user_info') {
+            result = await auth.getUser()
+          } else {
+            result = await auth.provider.request(data.data)
+          }
+          respond({ result, id })
+          break
+        case 'logout':
+          await auth.logout()
+          respond({ result: 'logout_success', id })
+          break
+      }
+    } catch (e) {
+      respond({ error: e, id })
     }
   }
 }
