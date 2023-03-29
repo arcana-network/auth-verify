@@ -78,9 +78,6 @@ onMounted(async () => {
 })
 
 const goToWallet = () => {
-  const data = JSON.stringify({ type: 'login_complete' })
-  ;(window as any).ReactNativeWebView?.postMessage(data)
-  ;(window as any).xarFlutter?.postMessage(data)
   router.push({ path: `/wallet/${id}` })
 }
 
