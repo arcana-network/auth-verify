@@ -10,8 +10,8 @@
     X-Content-Type-Options = "nosniff"
     Content-Security-Policy = '''
       font-src 'self' fonts.gstatic.com gstatic.com *.gstatic.com;
-      script-src 'self' https://*.cloudfront.net 'unsafe-inline' *.googletagmanager.com;
-      style-src 'self' 'unsafe-inline' https://*.cloudfront.net https://fonts.googleapis.com;
+      script-src 'self' https://*.cloudfront.net *.googletagmanager.com;
+      style-src 'self' https://*.cloudfront.net https://fonts.googleapis.com;
       frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network;
       frame-ancestors 'self';
     '''
@@ -23,8 +23,8 @@
     X-Content-Type-Options = "nosniff"
     Content-Security-Policy = '''
       font-src self fonts.gstatic.com gstatic.com *.gstatic.com;
-      script-src 'self' https://*.cloudfront.net 'unsafe-inline' *.googletagmanager.com;;
-      style-src 'self' 'unsafe-inline' https://*.cloudfront.net https://fonts.googleapis.com;
+      script-src 'self' https://*.cloudfront.net *.googletagmanager.com;;
+      style-src 'self' https://*.cloudfront.net https://fonts.googleapis.com;
       frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network;
       frame-ancestors 'self';
     '''
