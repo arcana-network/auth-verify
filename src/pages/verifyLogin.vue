@@ -96,6 +96,9 @@ const getIframeURL = (baseUrl: string, appId: string, hash: string) => {
 }
 
 const setError = (err: Error, url: string) => {
+  if (err === 'LOCAL_SHARE_MISSING') {
+    return router.push({ name: 'mfa-restore', params: { id } })
+  }
   const u = new URL(url)
   window.opener?.postMessage({ status: 'error', error: err }, u.origin)
 }
@@ -111,7 +114,6 @@ const replyTo = (url: string) => {
   desc.value = 'You can close this window now'
 }
 </script>
-
 
 <style>
 iframe {
