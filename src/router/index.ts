@@ -4,7 +4,8 @@ import LoginInitV1Page from '../pages/loginInitV1.vue'
 import StartPage from '../pages/startLogin.vue'
 import VerifyPage from '../pages/verifyLogin.vue'
 import WalletPage from '../pages/walletView.vue'
-import MFAPage from '../pages/mfaSetup.vue'
+import MFASetup from '../pages/mfaSetup.vue'
+import MFARestore from '../pages/mfaRestore.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -32,7 +33,12 @@ const router = createRouter({
     {
       path: '/mfa/:id/setup',
       name: 'mfa-setup',
-      component: MFAPage
+      component: MFASetup
+    },
+    {
+      path: '/mfa/:id/restore',
+      name: 'mfa-restore',
+      component: MFARestore
     },
     {
       path: '/wallet/:id',
