@@ -95,7 +95,7 @@ const getIframeURL = (baseUrl: string, appId: string, hash: string) => {
   return url.toString()
 }
 
-const setError = (err: Error, url: string) => {
+const setError = (err: Error | string, url: string) => {
   if (err === 'LOCAL_SHARE_MISSING') {
     return router.push({ name: 'mfa-restore', params: { id } })
   }
