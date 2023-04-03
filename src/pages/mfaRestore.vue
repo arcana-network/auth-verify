@@ -18,7 +18,7 @@ onMounted(async () => {
   const id = route.params.id
   const url = getIframeURL(
     import.meta.env?.VITE_WALLET_URL || 'http://localhost:3000',
-    `${id}/mfa/setup`
+    `${id}/mfa/restore`
   )
   cleanUrl()
   if (!iframeRef.value) {
