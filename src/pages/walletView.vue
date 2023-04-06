@@ -74,25 +74,26 @@ const handleRequest = async (
 ) => {
   const data = event.data
   if (data && data.type) {
-    let result
-    const { id, method } = data.data
-    try {
-      switch (data.type) {
-        case 'request':
+    switch (data.type) {
+      case 'request': {
+        const { id, method } = data.data
+        try {
+          let result
           if (method === 'get_user_info') {
             result = await auth.getUser()
           } else {
             result = await auth.provider.request(data.data)
           }
           respond({ result, id })
-          break
-        case 'logout':
-          await auth.logout()
-          respond({ result: 'logout_success', id })
-          break
+        } catch (e) {
+          respond({ error: e, id })
+        }
+        break;
       }
-    } catch (e) {
-      respond({ error: e, id })
+      case 'logout': {
+        await auth.logout()
+        break
+      }
     }
   }
 }
