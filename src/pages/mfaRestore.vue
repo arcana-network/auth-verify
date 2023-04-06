@@ -66,6 +66,7 @@ const setError = (err: Error, url: string) => {
 }
 
 const replyTo = (url: string) => {
+  recoverySuccess.value = true
   if (url) {
     const u = new URL(url)
     window.opener?.postMessage({ status: 'success' }, u.origin)
