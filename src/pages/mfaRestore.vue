@@ -1,6 +1,6 @@
 <template>
   <main class="center">
-    <div v-if="recoverySuccess">
+    <div v-if="recoverySuccess" class="center">
       <div class="stack stack-space-4">
         <div class="stack stack-space-4">
           <img class="app-icon" src="../assets/success-icon.svg" />
