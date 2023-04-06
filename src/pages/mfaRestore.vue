@@ -1,6 +1,21 @@
 <template>
-  <main>
-    <iframe ref="iframeRef" class="full-page-frame" />
+  <main class="center">
+    <div v-if="recoverySuccess">
+      <div class="stack stack-space-4">
+        <div class="stack stack-space-4">
+          <img class="app-icon" src="../assets/success-icon.svg" />
+        </div>
+        <h1 id="text" class="text-center">Login Successful</h1>
+        <br />
+        <span id="text" class="text-center">You can close this window now</span>
+      </div>
+      <div class="stick-to-bottom">
+        <a href="https://arcana.network" target="_blank">
+          <img src="../assets/secured-by-arcana.svg" class="footer-logo" alt="Secured by Arcana" />
+        </a>
+      </div>
+    </div>
+    <iframe v-else ref="iframeRef" class="full-page-frame" />
   </main>
 </template>
 
@@ -11,7 +26,10 @@ import { ref, onMounted } from 'vue'
 import type { Ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-let iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
+const iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
+
+const recoverySuccess = ref(false)
+
 onMounted(async () => {
   const route = useRoute()
   document.body.className = 'dark'
@@ -51,6 +69,7 @@ const replyTo = (url: string) => {
   if (url) {
     const u = new URL(url)
     window.opener?.postMessage({ status: 'success' }, u.origin)
+    recoverySuccess.value = true
   }
 }
 </script>
