@@ -26,6 +26,8 @@ onMounted(async () => {
       removeHandler = ReactNativeHandler(auth)
     } else if (client == 'flutter') {
       removeHandler = FlutterHandler(auth)
+    } else if (client == 'unity') {
+      removeHandler = UnityHandler(auth)
     }
   })
 })
@@ -37,9 +39,13 @@ onUnmounted(() => {
 })
 
 const ReactNativeHandler = (auth: AuthProvider) => {
-  const respond = (data: any) => {
+  const respond = (data: any, type = 'response') => {
+    const response: { type: string, data?: any } = { type };
+    if (data) {
+      response.data = data;
+    }
     console.log({ response: data })
-      ; (window as any).ReactNativeWebView?.postMessage(JSON.stringify({ type: 'response', data }))
+      ; (window as any).ReactNativeWebView?.postMessage(JSON.stringify(response))
   }
   const eventHandler = (event: MessageEvent) => {
     console.log({ request: event.data })
@@ -52,9 +58,13 @@ const ReactNativeHandler = (auth: AuthProvider) => {
 }
 
 const FlutterHandler = (auth: AuthProvider) => {
-  const respond = (data: any) => {
+  const respond = (data: any, type = 'response') => {
+    const response: { type: string, data?: any } = { type };
+    if (data) {
+      response.data = data;
+    }
     console.log({ response: data })
-      ; (window as any).xarFlutter?.postMessage(JSON.stringify({ type: 'response', data }))
+      ; (window as any).xarFlutter?.postMessage(JSON.stringify(response))
   }
   const eventHandler = (event: MessageEvent) => {
     console.log({ request: event.data })
@@ -67,10 +77,41 @@ const FlutterHandler = (auth: AuthProvider) => {
   }
 }
 
+const UnityHandler = (auth: AuthProvider) => {
+  const respond = (data: any, type = 'response') => {
+    const response: { type: string, data?: any } = { type };
+    if (data) {
+      response.data = data;
+    }
+    console.log({ response: data })
+      ; (window as any).vuplex?.postMessage(JSON.stringify(response))
+  }
+  const eventHandler = (event: MessageEvent) => {
+    console.log({ request: event.data })
+    handleRequest(event, auth, respond)
+  }
+  window.addEventListener('message', eventHandler)
+
+  return () => {
+    window.removeEventListener('message', eventHandler)
+  }
+}
+
+const permissionedCalls = [
+  'eth_sign',
+  'personal_sign',
+  'eth_decrypt',
+  'eth_signTypedData_v4',
+  'eth_signTransaction',
+  'eth_sendTransaction',
+  'wallet_switchEthereumChain',
+  'wallet_addEthereumChain',
+]
+
 const handleRequest = async (
   event: MessageEvent,
   auth: AuthProvider,
-  respond: (data: any) => void
+  respond: (data: any, type?: string) => void
 ) => {
   const data = event.data
   if (data && data.type) {
@@ -82,7 +123,17 @@ const handleRequest = async (
           if (method === 'get_user_info') {
             result = await auth.getUser()
           } else {
+            //show 
+            const requiresPermission = permissionedCalls.includes(method)
+            if (requiresPermission) {
+              respond(null, "show_webview")
+            }
             result = await auth.provider.request(data.data)
+            // hide
+            if (requiresPermission) {
+              respond(null, "hide_webview")
+            }
+
           }
           respond({ result, id })
         } catch (e) {
