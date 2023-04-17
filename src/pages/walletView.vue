@@ -1,16 +1,27 @@
 <!-- eslint-disable vue/valid-template-root -->
-<template></template>
+<template>
+  <main class="center">
+    <div v-if="loading" class="stack stack-space-4">
+      <Loading class="app-icon" />
+    </div>
+  </main>
+</template>
 
 <script lang="ts" setup>
 import { CLIENT_STORAGE_KEY, type ClientKey } from '@/helpers/utils';
 import { AuthProvider } from '@arcana/auth'
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+
+import Loading from '../components/loadingSpinner.vue'
+let loading = ref(true)
 
 let client: ClientKey = localStorage.getItem(CLIENT_STORAGE_KEY) as (ClientKey | null) || 'rn'
 let removeHandler: (() => void) | null = null
 
 onMounted(async () => {
+  document.body.className = 'dark-transparent'
+  // document.body.style.backgroundColor = 'rgb(24, 24, 24, 0.8)'
   const id = useRoute().params.id as string
   const auth = new AuthProvider(id, {
     network: import.meta.env.VITE_SELF_ENV,
@@ -18,6 +29,7 @@ onMounted(async () => {
   })
   await auth.init()
   auth.provider.on('connect', () => {
+    loading.value = false
     const data = JSON.stringify({ type: 'login_complete' })
       ; (window as any).ReactNativeWebView?.postMessage(data)
       ; (window as any).xarFlutter?.postMessage(data)
