@@ -20,7 +20,6 @@ let client: ClientKey = localStorage.getItem(CLIENT_STORAGE_KEY) as (ClientKey |
 let removeHandler: (() => void) | null = null
 
 onMounted(async () => {
-  document.body.className = 'dark-transparent'
   // document.body.style.backgroundColor = 'rgb(24, 24, 24, 0.8)'
   const id = useRoute().params.id as string
   const auth = new AuthProvider(id, {
@@ -30,6 +29,7 @@ onMounted(async () => {
   await auth.init()
   auth.provider.on('connect', () => {
     loading.value = false
+    document.body.className = 'dark-transparent'
     const data = JSON.stringify({ type: 'login_complete' })
       ; (window as any).ReactNativeWebView?.postMessage(data)
       ; (window as any).xarFlutter?.postMessage(data)
@@ -59,18 +59,8 @@ const ReactNativeHandler = (auth: AuthProvider) => {
     console.log({ response: data })
       ; (window as any).ReactNativeWebView?.postMessage(JSON.stringify(response))
   }
-  const eventHandler = (event: MessageEvent) => {
-    console.log({ request: event.data })
-    handleRequest(event, auth, respond)
-  }
-  document.body.onclick = () => {
-    respond(null, "hide_webview")
-  }
-  window.addEventListener('message', eventHandler)
-  return () => {
-    document.body.onclick = null
-    window.removeEventListener('message', eventHandler)
-  }
+
+  return createWindowListener(auth, respond)
 }
 
 const FlutterHandler = (auth: AuthProvider) => {
@@ -82,15 +72,7 @@ const FlutterHandler = (auth: AuthProvider) => {
     console.log({ response: data })
       ; (window as any).xarFlutter?.postMessage(JSON.stringify(response))
   }
-  const eventHandler = (event: MessageEvent) => {
-    console.log({ request: event.data })
-    handleRequest(event, auth, respond)
-  }
-  window.addEventListener('message', eventHandler)
-
-  return () => {
-    window.removeEventListener('message', eventHandler)
-  }
+  return createWindowListener(auth, respond)
 }
 
 const UnityHandler = (auth: AuthProvider) => {
@@ -102,17 +84,29 @@ const UnityHandler = (auth: AuthProvider) => {
     console.log({ response: data })
       ; (window as any).vuplex?.postMessage(JSON.stringify(response))
   }
+  return createWindowListener(auth, respond)
+}
+
+const createWindowListener = (auth: AuthProvider,
+  respond: (data: any, type?: string) => void) => {
+
   const eventHandler = (event: MessageEvent) => {
     console.log({ request: event.data })
     handleRequest(event, auth, respond)
   }
+
   window.addEventListener('message', eventHandler)
 
+  document.body.onclick = (e: MouseEvent) => {
+    respond(null, "hide_webview")
+    e.stopImmediatePropagation()
+  }
+
   return () => {
+    document.body.onclick = null
     window.removeEventListener('message', eventHandler)
   }
 }
-
 const permissionedCalls = [
   'eth_sign',
   'personal_sign',
