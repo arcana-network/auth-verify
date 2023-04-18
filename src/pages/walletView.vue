@@ -63,8 +63,12 @@ const ReactNativeHandler = (auth: AuthProvider) => {
     console.log({ request: event.data })
     handleRequest(event, auth, respond)
   }
+  document.body.onclick = () => {
+    respond(null, "hide_webview")
+  }
   window.addEventListener('message', eventHandler)
   return () => {
+    document.body.onclick = null
     window.removeEventListener('message', eventHandler)
   }
 }
