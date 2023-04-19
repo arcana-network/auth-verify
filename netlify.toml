@@ -1,0 +1,32 @@
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Content-Security-Policy = '''
+      font-src 'self' fonts.gstatic.com gstatic.com *.gstatic.com;
+      script-src 'self' https://*.cloudfront.net *.googletagmanager.com;
+      style-src 'self' 'unsafe-inline' https://*.cloudfront.net https://fonts.googleapis.com;
+      frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network;
+      frame-ancestors 'self';
+    '''
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Content-Security-Policy = '''
+      font-src self fonts.gstatic.com gstatic.com *.gstatic.com;
+      script-src 'self' https://*.cloudfront.net *.googletagmanager.com;;
+      style-src 'self' 'unsafe-inline' https://*.cloudfront.net https://fonts.googleapis.com;
+      frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network;
+      frame-ancestors 'self';
+    '''
+    cache-control = "max-age=31536000, immutable"
+

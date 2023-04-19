@@ -1,28 +1,15 @@
-<script>
-export default {
-  data() {
-    return {
-      stroke: 8,
-      parentUrl: null,
-      radius: 20,
-      secondaryColor: '#8D8D8D'
-    }
-  },
-  methods: {
-    getViewBoxSize(strokeWidth, radius) {
-      const startingPoint = -radius - strokeWidth / 2 + 1
-      const endpoint = radius * 2 + strokeWidth
-      return [startingPoint, startingPoint, endpoint, endpoint].join(' ')
-    },
-    getPath(radius) {
-      return ['M' + radius + ' 0c0-9.94-8.06', radius, radius, radius].join('-')
-    }
-  },
-  computed: {
-    styles() {
-      return { color: this.color, width: this.size, height: this.style }
-    }
-  }
+<script lang="ts" setup>
+const stroke = 8
+const radius = 20
+const secondaryColor = '#8D8D8D'
+
+const getViewBoxSize = (strokeWidth: number, radius: number) => {
+  const startingPoint = -radius - strokeWidth / 2 + 1
+  const endpoint = radius * 2 + strokeWidth
+  return [startingPoint, startingPoint, endpoint, endpoint].join(' ')
+}
+const getPath = (radius: number) => {
+  return ['M' + radius + ' 0c0-9.94-8.06', radius, radius, radius].join('-')
 }
 </script>
 
@@ -31,27 +18,23 @@ export default {
     <svg
       width="80"
       height="80"
-      :viewBox="getViewBoxSize(Number(stroke), this.radius)"
+      :viewBox="getViewBoxSize(Number(stroke), radius)"
       xmlns="http://www.w3.org/2000/svg"
       className="xar-loader-circle"
       data-testid="oval-svg"
     >
       <g fill="none" fillRule="evenodd">
-        <g
-          transform="translate(1 1)"
-          :stroke-width="this.stroke"
-          data-testid="oval-secondary-group"
-        >
+        <g transform="translate(1 1)" :stroke-width="stroke" data-testid="oval-secondary-group">
           <circle
             strokeOpacity=".5"
             cx="0"
             cy="0"
-            :r="this.radius"
-            :stroke="this.secondaryColor"
-            :stroke-width="this.stroke"
+            :r="radius"
+            :stroke="secondaryColor"
+            :stroke-width="stroke"
             opacity="0.3"
           />
-          <path :d="getPath(this.radius)" class="xar-path">
+          <path :d="getPath(radius)" class="xar-path">
             <animateTransform
               attributeName="transform"
               type="rotate"

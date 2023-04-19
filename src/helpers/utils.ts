@@ -29,7 +29,7 @@ function atobUTF8(str: string) {
 /**
  * Given a JSON-serializable object, encode as a Base64 string.
  */
-export function encodeJSON(options: JSON) {
+export function encodeJSON(options: any) {
   return btoaUTF8(JSON.stringify(options))
 }
 
@@ -48,3 +48,6 @@ export function cleanUrl() {
 export function redirect(url: string) {
   setTimeout(() => (window.location.href = url))
 }
+
+export type ClientKey = 'rn' | 'flutter' | 'unity'
+export const CLIENT_STORAGE_KEY: ClientKey = 'rn'
