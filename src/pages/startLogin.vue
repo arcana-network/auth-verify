@@ -17,7 +17,7 @@
 </template>
 <script lang="ts" setup>
 import Loading from '../components/loadingSpinner.vue'
-import { encodeJSON } from '../helpers/utils'
+import { CLIENT_STORAGE_KEY, encodeJSON } from '../helpers/utils'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -31,14 +31,11 @@ onMounted(() => {
   const email = route.query.email as string
   const loginSrc = route.query.loginSrc as string
   if (!(clientId && loginType && loginSrc)) {
-    console.log('hello')
     err.value = 'Missing params!'
     return
   }
-  if (!loginSrc) {
-    err.value = 'Login source required!'
-    return
-  }
+  localStorage.setItem(CLIENT_STORAGE_KEY, loginSrc)
+  
   const appId = clientId.split('_')[2]
   if (loginType == 'passwordless') {
     err.value = 'Not yet implemented'
