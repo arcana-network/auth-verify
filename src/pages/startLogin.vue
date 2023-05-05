@@ -8,7 +8,7 @@
       <img class="app-icon" src="../assets/error-icon.svg" />
       <div class="stack stack-space-3">
         <div class="stack stack-space-1">
-          <h1 class="text-center">Authorization Error</h1>
+          <h1 class="text-center">Authorization error</h1>
           <h2 id="error-code" class="text-center">Error: {{ err }}</h2>
         </div>
       </div>
@@ -35,7 +35,7 @@ onMounted(() => {
     return
   }
   localStorage.setItem(CLIENT_STORAGE_KEY, loginSrc)
-  
+
   const appId = clientId.split('_')[2]
   if (loginType == 'passwordless') {
     err.value = 'Not yet implemented'
