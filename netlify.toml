@@ -12,7 +12,7 @@
       font-src 'self' fonts.gstatic.com gstatic.com *.gstatic.com;
       script-src 'self' https://*.cloudfront.net *.googletagmanager.com;
       style-src 'self' 'unsafe-inline' https://*.cloudfront.net https://fonts.googleapis.com;
-      frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network;
+      frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network https://deploy-preview-261--wallet-dev.netlify.app;
       frame-ancestors 'self';
     '''
 
@@ -25,7 +25,7 @@
       font-src self fonts.gstatic.com gstatic.com *.gstatic.com;
       script-src 'self' https://*.cloudfront.net *.googletagmanager.com;;
       style-src 'self' 'unsafe-inline' https://*.cloudfront.net https://fonts.googleapis.com;
-      frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network;
+      frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network https://deploy-preview-261--wallet-dev.netlify.app;
       frame-ancestors 'self';
     '''
     cache-control = "max-age=31536000, immutable"
