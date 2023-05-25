@@ -20,16 +20,20 @@ let client: ClientKey = localStorage.getItem(CLIENT_STORAGE_KEY) as (ClientKey |
 let removeHandler: (() => void) | null = null
 
 onMounted(async () => {
-  // document.body.style.backgroundColor = 'rgb(24, 24, 24, 0.8)'
   const id = useRoute().params.id as string
   const auth = new AuthProvider(id, {
     network: import.meta.env.VITE_SELF_ENV,
     alwaysVisible: true
   })
-  await auth.init()
+  const isMobile = client === "rn" || client === "flutter"
+  await auth.init(isMobile)
   auth.provider.on('connect', () => {
     loading.value = false
-    document.body.className = 'dark-transparent'
+    if (isMobile) {
+      document.body.className = 'dark-transparent'
+    } else {
+      document.body.className = 'dark-opacity'
+    }
     const data = JSON.stringify({ type: 'login_complete' })
       ; (window as any).ReactNativeWebView?.postMessage(data)
       ; (window as any).xarFlutter?.postMessage(data)
