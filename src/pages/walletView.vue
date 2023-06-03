@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CLIENT_STORAGE_KEY, type ClientKey } from '@/helpers/utils';
+import { getClientStorageKey, type ClientKey } from '@/helpers/utils';
 import { AuthProvider } from '@arcana/auth'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -18,17 +18,16 @@ import { useRoute } from 'vue-router'
 import Loading from '../components/loadingSpinner.vue'
 let loading = ref(true)
 
-let client: ClientKey = localStorage.getItem(CLIENT_STORAGE_KEY) as (ClientKey | null) || 'rn'
+const id = useRoute().params.id as string
+let client: ClientKey = localStorage.getItem(getClientStorageKey(id)) as (ClientKey | null) || 'rn'
 let removeHandler: (() => void) | null = null
 let respondHandler: (data: any, type?: string) => void = () => { }
 onMounted(async () => {
-  const id = useRoute().params.id as string
   const auth = new AuthProvider(id, {
     network: import.meta.env.VITE_SELF_ENV,
     alwaysVisible: true
   })
   const isStandAlone = client === "rn" || client === "flutter" || client === "unity"
-  await auth.init()
   if (isStandAlone) {
     const mode = client === "rn" || client === "flutter" ? 1 : 2;
     auth["standaloneMode"](mode, (event: string, data: any) => {
@@ -39,6 +38,7 @@ onMounted(async () => {
       }
     })
   }
+  await auth.init()
   auth.provider.on('connect', () => {
     loading.value = false
     if (client === "rn" || client === "flutter") {
