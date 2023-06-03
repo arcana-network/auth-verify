@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/valid-template-root -->
 <template>
   <main class="center">
-    <div v-if="loading" class="stack stack-space-4">
+    <div v-show="loading" class="stack stack-space-4">
       <Loading class="app-icon" />
       <span id="text" class="text-center">Logging in</span>
     </div>
@@ -22,6 +22,7 @@ const id = useRoute().params.id as string
 let client: ClientValue = localStorage.getItem(getClientStorageKey(id)) as (ClientValue | null) || 'rn'
 let removeHandler: (() => void) | null = null
 let respondHandler: (data: any, type?: string) => void = () => { }
+
 onMounted(async () => {
   const auth = new AuthProvider(id, {
     network: import.meta.env.VITE_SELF_ENV,
