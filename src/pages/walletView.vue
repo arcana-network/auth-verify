@@ -3,7 +3,9 @@
   <main class="center">
     <div v-if="loading" class="stack stack-space-4">
       <Loading class="app-icon" />
+      <span id="text" class="text-center">Logging in</span>
     </div>
+
   </main>
 </template>
 
@@ -18,33 +20,47 @@ let loading = ref(true)
 
 let client: ClientKey = localStorage.getItem(CLIENT_STORAGE_KEY) as (ClientKey | null) || 'rn'
 let removeHandler: (() => void) | null = null
-
+let respondHandler: (data: any, type?: string) => void = () => { }
 onMounted(async () => {
   const id = useRoute().params.id as string
   const auth = new AuthProvider(id, {
     network: import.meta.env.VITE_SELF_ENV,
     alwaysVisible: true
   })
-  const isMobile = client === "rn" || client === "flutter"
-  await auth.init(isMobile)
+  const isStandAlone = client === "rn" || client === "flutter" || client === "unity"
+  await auth.init()
+  if (isStandAlone) {
+    const mode = client === "rn" || client === "flutter" ? 1 : 2;
+    auth["standaloneMode"](mode, (event: string, data: any) => {
+      if (event === "hide_webview") {
+        respondHandler(null, "hide_webview")
+      } else if (event === "open_url") {
+        respondHandler(data.url, "open_link")
+      }
+    })
+  }
   auth.provider.on('connect', () => {
     loading.value = false
-    if (isMobile) {
+    if (client === "rn" || client === "flutter") {
       document.body.className = 'dark-transparent'
     } else {
       document.body.className = 'dark-opacity'
     }
-    const data = JSON.stringify({ type: 'login_complete' })
-      ; (window as any).ReactNativeWebView?.postMessage(data)
-      ; (window as any).xarFlutter?.postMessage(data)
     auth.showWallet()
     if (client == 'rn') {
-      removeHandler = ReactNativeHandler(auth)
+      const { respond, destroy } = ReactNativeHandler(auth)
+      respondHandler = respond
+      removeHandler = destroy
     } else if (client == 'flutter') {
-      removeHandler = FlutterHandler(auth)
+      const { respond, destroy } = FlutterHandler(auth)
+      respondHandler = respond
+      removeHandler = destroy
     } else if (client == 'unity') {
-      removeHandler = UnityHandler(auth)
+      const { respond, destroy } = UnityHandler(auth)
+      respondHandler = respond
+      removeHandler = destroy
     }
+    respondHandler(null, "login_complete")
   })
 })
 
@@ -106,9 +122,12 @@ const createWindowListener = (auth: AuthProvider,
     e.stopImmediatePropagation()
   }
 
-  return () => {
-    document.body.onclick = null
-    window.removeEventListener('message', eventHandler)
+  return {
+    destroy: () => {
+      document.body.onclick = null
+      window.removeEventListener('message', eventHandler)
+    },
+    respond,
   }
 }
 const permissionedCalls = [
