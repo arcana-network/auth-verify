@@ -162,11 +162,12 @@ const handleRequest = async (
             if (requiresPermission) {
               respond(null, "show_webview")
             }
-            result = await auth.provider.request(data.data)
-            // hide
-            if (requiresPermission) {
-              respond(null, "hide_webview")
-            }
+            result = await auth.provider.request(data.data).finally(() => {
+              // hide
+              if (requiresPermission) {
+                respond(null, "hide_webview")
+              }
+            })
 
           }
           respond({ result, id })
