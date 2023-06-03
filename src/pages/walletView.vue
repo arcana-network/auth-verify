@@ -31,7 +31,7 @@ onMounted(async () => {
   if (isStandAlone) {
     const mode = client === "rn" || client === "flutter" ? 1 : 2;
     auth["standaloneMode"](mode, (event: string, data: any) => {
-      if (event === "hide_webview") {
+      if (event === "wallet_close") {
         respondHandler(null, "hide_webview")
       } else if (event === "open_url") {
         respondHandler(data.url, "open_link")
