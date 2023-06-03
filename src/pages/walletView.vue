@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getClientStorageKey, type ClientKey } from '@/helpers/utils';
+import { getClientStorageKey, type ClientValue } from '@/helpers/utils';
 import { AuthProvider } from '@arcana/auth'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -19,7 +19,7 @@ import Loading from '../components/loadingSpinner.vue'
 let loading = ref(true)
 
 const id = useRoute().params.id as string
-let client: ClientKey = localStorage.getItem(getClientStorageKey(id)) as (ClientKey | null) || 'rn'
+let client: ClientValue = localStorage.getItem(getClientStorageKey(id)) as (ClientValue | null) || 'rn'
 let removeHandler: (() => void) | null = null
 let respondHandler: (data: any, type?: string) => void = () => { }
 onMounted(async () => {
