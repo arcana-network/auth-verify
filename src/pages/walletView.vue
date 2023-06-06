@@ -24,17 +24,6 @@ let removeHandler: (() => void) | null = null
 let respondHandler: (data: any, type?: string) => void = () => { }
 
 onMounted(async () => {
-  const log = function (log: string) {
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ 'type': 'Console', 'data': { 'log': log } }))
-  };
-  // eslint-disable-next-line no-global-assign
-  console = {
-    log,
-    debug: log,
-    info: log,
-    warn: log,
-    error: log,
-  };
   const auth = new AuthProvider(id, {
     network: import.meta.env.VITE_SELF_ENV,
     alwaysVisible: true

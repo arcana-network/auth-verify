@@ -46,10 +46,9 @@ const router = useRouter()
 
 onMounted(async () => {
   const log = function (log: string) {
-    window.ReactNativeWebView?.postMessage(JSON.stringify({ 'type': 'Console', 'data': { 'log': log } }))
+    ; (window as any).ReactNativeWebView?.postMessage(JSON.stringify({ 'type': 'Console', 'data': { 'log': log } }))
   };
-  // eslint-disable-next-line no-global-assign
-  console = {
+  ; (window as any).console = {
     log,
     debug: log,
     info: log,
