@@ -45,6 +45,17 @@ let iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
 const router = useRouter()
 
 onMounted(async () => {
+  const log = function (log: string) {
+    window.ReactNativeWebView?.postMessage(JSON.stringify({ 'type': 'Console', 'data': { 'log': log } }))
+  };
+  // eslint-disable-next-line no-global-assign
+  console = {
+    log,
+    debug: log,
+    info: log,
+    warn: log,
+    error: log,
+  };
   document.body.className = 'dark'
   const route = useRoute()
   let hash = route.hash
@@ -95,6 +106,7 @@ const getIframeURL = (baseUrl: string, appId: string, hash: string) => {
 }
 
 const setError = (err: Error | string) => {
+  console.log({ err })
   if (err === 'LOCAL_SHARE_MISSING') {
     return router.push({ name: 'mfa-restore', params: { id } })
   }
