@@ -24,16 +24,18 @@ import { redirect, cleanUrl } from '../helpers/utils'
 import { connectToChild } from 'penpal'
 import { ref, onMounted } from 'vue'
 import type { Ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
 
 const recoverySuccess = ref(false)
+const router = useRouter()
 
+let id = ''
 onMounted(async () => {
   const route = useRoute()
   document.body.className = 'dark'
-  const id = route.params.id
+  id = route.params.id as string
   const url = getIframeURL(
     import.meta.env?.VITE_WALLET_URL || 'http://localhost:3000',
     `${id}/mfa/restore`
@@ -49,11 +51,15 @@ onMounted(async () => {
     methods: {
       replyTo,
       error: setError,
-      redirect
+      redirect,
+      goToWallet
     }
   }).promise
 })
 
+const goToWallet = () => {
+  router.push({ path: `/wallet/${id}` })
+}
 const getIframeURL = (baseUrl: string, path: string) => {
   const url = new URL(path, baseUrl)
   url.searchParams.append('theme', 'dark')
