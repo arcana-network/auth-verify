@@ -60,18 +60,14 @@ const getIframeURL = (baseUrl: string, path: string) => {
   return url.toString()
 }
 
-const setError = (err: Error, url: string) => {
-  const u = new URL(url)
-  window.opener?.postMessage({ status: 'error', error: err }, u.origin)
+const setError = (err: Error) => {
+  window.opener?.postMessage({ status: 'error', error: err }, "*")
 }
 
-const replyTo = (url: string) => {
+const replyTo = () => {
   recoverySuccess.value = true
-  if (url) {
-    const u = new URL(url)
-    window.opener?.postMessage({ status: 'success' }, u.origin)
-    recoverySuccess.value = true
-  }
+  window.opener?.postMessage({ status: 'success' }, "*")
+  recoverySuccess.value = true
 }
 </script>
 <style>
