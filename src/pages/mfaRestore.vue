@@ -60,6 +60,7 @@ onMounted(async () => {
 const goToWallet = () => {
   router.push({ path: `/wallet/${id}` })
 }
+
 const getIframeURL = (baseUrl: string, path: string) => {
   const url = new URL(path, baseUrl)
   url.searchParams.append('theme', 'dark')

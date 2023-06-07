@@ -13,8 +13,9 @@
 import { getClientStorageKey, type ClientValue } from '@/helpers/utils';
 import { AuthProvider } from '@arcana/auth'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
+const router = useRouter();
 import Loading from '../components/loadingSpinner.vue'
 let loading = ref(true)
 
@@ -36,6 +37,8 @@ onMounted(async () => {
         respondHandler(null, "hide_webview")
       } else if (event === "open_url") {
         respondHandler(data.url, "open_link")
+      } else if (event === "mfa_setup") {
+        router.push({ path: `/mfa/${id}/setup` })
       }
     })
   }
