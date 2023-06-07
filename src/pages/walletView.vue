@@ -39,6 +39,7 @@ onMounted(async () => {
       } else if (event === "open_url") {
         respondHandler(data.url, "open_link")
       } else if (event === "mfa_setup") {
+        document.querySelector(".xar-wallet")?.remove()
         router.push({ path: `/mfa/${id}/setup` })
       }
     })
