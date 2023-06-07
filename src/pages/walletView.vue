@@ -14,9 +14,9 @@ import { getClientStorageKey, type ClientValue } from '@/helpers/utils';
 import { AuthProvider } from '@arcana/auth'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Loading from '../components/loadingSpinner.vue'
 
 const router = useRouter();
-import Loading from '../components/loadingSpinner.vue'
 let loading = ref(true)
 
 const id = useRoute().params.id as string
@@ -33,6 +33,7 @@ onMounted(async () => {
   if (isStandAlone) {
     const mode = client === "rn" || client === "flutter" ? 1 : 2;
     auth["standaloneMode"](mode, (event: string, data: any) => {
+      console.log({ event, data })
       if (event === "wallet_close") {
         respondHandler(null, "hide_webview")
       } else if (event === "open_url") {
