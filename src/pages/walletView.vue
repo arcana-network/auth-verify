@@ -13,9 +13,10 @@
 import { getClientStorageKey, type ClientValue } from '@/helpers/utils';
 import { AuthProvider } from '@arcana/auth'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-
+import { useRoute, useRouter } from 'vue-router'
 import Loading from '../components/loadingSpinner.vue'
+
+const router = useRouter();
 let loading = ref(true)
 
 const id = useRoute().params.id as string
@@ -36,6 +37,9 @@ onMounted(async () => {
         respondHandler(null, "hide_webview")
       } else if (event === "open_url") {
         respondHandler(data.url, "open_link")
+      } else if (event === "mfa_setup") {
+        document.querySelector(".xar-wallet")?.remove()
+        router.push({ path: `/mfa/${id}/setup` })
       }
     })
   }
@@ -62,6 +66,9 @@ onMounted(async () => {
       removeHandler = destroy
     }
     respondHandler(null, "login_complete")
+  })
+  auth.provider.on('disconnect', () => {
+    respondHandler(null, "logout_complete")
   })
 })
 
