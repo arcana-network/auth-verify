@@ -30,6 +30,16 @@ const auth = new AuthProvider(id, {
 })
 
 onMounted(async () => {
+  const log = function (log: string) {
+    ; (window as any).ReactNativeWebView?.postMessage(JSON.stringify({ 'type': 'Console', 'data': { 'log': log } }))
+  };
+  ; (window as any).console = {
+    log,
+    debug: log,
+    info: log,
+    warn: log,
+    error: log,
+  };
   const isStandAlone = client === "rn" || client === "flutter" || client === "unity"
   if (isStandAlone) {
     const mode = client === "rn" || client === "flutter" ? 1 : 2;
@@ -44,9 +54,9 @@ onMounted(async () => {
       }
     })
   }
-  await auth.init()
   auth.provider.on('connect', connectListener)
   auth.provider.on('disconnect', disconnectListener)
+  await auth.init()
 })
 const disconnectListener = () => {
   respondHandler(null, "logout_complete")
@@ -78,7 +88,6 @@ onUnmounted(() => {
   if (removeHandler) {
     removeHandler()
   }
-
   auth.provider.removeListener('connect', connectListener)
   auth.provider.removeListener('disconnect', disconnectListener)
 })
