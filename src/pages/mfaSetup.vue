@@ -49,7 +49,6 @@ const setError = (err: Error, url: string) => {
 }
 
 const replyTo = (url: string) => {
-  console.log({ opener: window.opener })
   if (window.opener) {
     if (url) {
       const u = new URL(url)

@@ -33,7 +33,6 @@ onMounted(async () => {
   if (isStandAlone) {
     const mode = client === "rn" || client === "flutter" ? 1 : 2;
     auth["standaloneMode"](mode, (event: string, data: any) => {
-      console.log({ event, data })
       if (event === "wallet_close") {
         respondHandler(null, "hide_webview")
       } else if (event === "open_url") {
@@ -183,6 +182,9 @@ const handleRequest = async (
       }
       case 'logout': {
         await auth.logout()
+        if (data.id) {
+          respond({ result: true, id: data.id })
+        }
         break
       }
     }
