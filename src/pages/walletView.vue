@@ -24,22 +24,11 @@ let client: ClientValue = localStorage.getItem(getClientStorageKey(id)) as (Clie
 let removeHandler: (() => void) | null = null
 let respondHandler: (data: any, type?: string) => void = () => { }
 
-const auth = new AuthProvider(id, {
-  network: import.meta.env.VITE_SELF_ENV,
-  alwaysVisible: true
-})
-
 onMounted(async () => {
-  const log = function (log: string) {
-    ; (window as any).ReactNativeWebView?.postMessage(JSON.stringify({ 'type': 'Console', 'data': { 'log': log } }))
-  };
-  ; (window as any).console = {
-    log,
-    debug: log,
-    info: log,
-    warn: log,
-    error: log,
-  };
+  const auth = new AuthProvider(id, {
+    network: import.meta.env.VITE_SELF_ENV,
+    alwaysVisible: true
+  })
   const isStandAlone = client === "rn" || client === "flutter" || client === "unity"
   if (isStandAlone) {
     const mode = client === "rn" || client === "flutter" ? 1 : 2;
@@ -54,42 +43,39 @@ onMounted(async () => {
       }
     })
   }
-  auth.provider.on('connect', connectListener)
-  auth.provider.on('disconnect', disconnectListener)
   await auth.init()
+  auth.provider.on('connect', () => {
+    loading.value = false
+    if (client === "rn" || client === "flutter") {
+      document.body.className = 'dark-transparent'
+    } else {
+      document.body.className = 'dark-opacity'
+    }
+    auth.showWallet()
+    if (client == 'rn') {
+      const { respond, destroy } = ReactNativeHandler(auth)
+      respondHandler = respond
+      removeHandler = destroy
+    } else if (client == 'flutter') {
+      const { respond, destroy } = FlutterHandler(auth)
+      respondHandler = respond
+      removeHandler = destroy
+    } else if (client == 'unity') {
+      const { respond, destroy } = UnityHandler(auth)
+      respondHandler = respond
+      removeHandler = destroy
+    }
+    respondHandler(null, "login_complete")
+  })
+  auth.provider.on('disconnect', () => {
+    respondHandler(null, "logout_complete")
+  })
 })
-const disconnectListener = () => {
-  respondHandler(null, "logout_complete")
-}
-const connectListener = () => {
-  loading.value = false
-  if (client === "rn" || client === "flutter") {
-    document.body.className = 'dark-transparent'
-  } else {
-    document.body.className = 'dark-opacity'
-  }
-  auth.showWallet()
-  if (client == 'rn') {
-    const { respond, destroy } = ReactNativeHandler(auth)
-    respondHandler = respond
-    removeHandler = destroy
-  } else if (client == 'flutter') {
-    const { respond, destroy } = FlutterHandler(auth)
-    respondHandler = respond
-    removeHandler = destroy
-  } else if (client == 'unity') {
-    const { respond, destroy } = UnityHandler(auth)
-    respondHandler = respond
-    removeHandler = destroy
-  }
-  respondHandler(null, "login_complete")
-}
+
 onUnmounted(() => {
   if (removeHandler) {
     removeHandler()
   }
-  auth.provider.removeListener('connect', connectListener)
-  auth.provider.removeListener('disconnect', disconnectListener)
 })
 
 const ReactNativeHandler = (auth: AuthProvider) => {
