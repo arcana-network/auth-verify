@@ -26,8 +26,15 @@
   --primary-color: #f7f7f7;
   --secondary-text-color: #a1a3ab;
 }
-.dark-transparent {
+
+.dark-opacity {
   --background-color: rgb(24, 24, 24, 0.8);
+  --primary-color: #f7f7f7;
+  --secondary-text-color: #a1a3ab;
+}
+
+.dark-transparent {
+  --background-color: 'transparent';
   --primary-color: #f7f7f7;
   --secondary-text-color: #a1a3ab;
 }

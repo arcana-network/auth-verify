@@ -9,13 +9,14 @@ import { redirect, cleanUrl } from '../helpers/utils'
 import { connectToChild } from 'penpal'
 import { ref, onMounted } from 'vue'
 import type { Ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 let iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
+const router = useRouter()
+const route = useRoute()
+const id = route.params.id
 onMounted(async () => {
-  const route = useRoute()
   document.body.className = 'dark'
-  const id = route.params.id
   const url = getIframeURL(
     import.meta.env?.VITE_WALLET_URL || 'http://localhost:3000',
     `${id}/mfa/setup`
@@ -48,9 +49,13 @@ const setError = (err: Error, url: string) => {
 }
 
 const replyTo = (url: string) => {
-  if (url) {
-    const u = new URL(url)
-    window.opener?.postMessage({ status: 'success' }, u.origin)
+  if (window.opener) {
+    if (url) {
+      const u = new URL(url)
+      window.opener?.postMessage({ status: 'success' }, u.origin)
+    }
+  } else {
+    router.push({ path: `/wallet/${id}` })
   }
 }
 </script>

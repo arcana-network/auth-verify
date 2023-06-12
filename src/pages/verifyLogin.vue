@@ -9,7 +9,6 @@
         <img class="app-icon" src="../assets/success-icon.svg" />
       </div>
       <h1 v-if="message" id="text" class="text-center">{{ message }}</h1>
-      <br />
       <span v-if="desc" id="text" class="text-center">{{ desc }}</span>
     </div>
     <div v-else class="stack stack-space-4">
@@ -95,19 +94,15 @@ const getIframeURL = (baseUrl: string, appId: string, hash: string) => {
   return url.toString()
 }
 
-const setError = (err: Error | string, url: string) => {
+const setError = (err: Error | string) => {
   if (err === 'LOCAL_SHARE_MISSING') {
     return router.push({ name: 'mfa-restore', params: { id } })
   }
-  const u = new URL(url)
-  window.opener?.postMessage({ status: 'error', error: err }, u.origin)
+  window.opener?.postMessage({ status: 'error', error: err }, "*")
 }
 
-const replyTo = (url: string) => {
-  if (url) {
-    const u = new URL(url)
-    window.opener?.postMessage({ status: 'success' }, u.origin)
-  }
+const replyTo = () => {
+  window.opener?.postMessage({ status: 'success' }, "*")
 
   loading.value = false
   message.value = 'Login Successful'

@@ -2,7 +2,14 @@
   <main class="center">
     <iframe ref="iframeRef" />
     <div v-if="!err" class="stack stack-space-4">
-      <Loading class="app-icon" />
+      <div v-if="loading" class="stack stack-space-4">
+        <Loading class="app-icon" />
+      </div>
+      <div v-else class="stack stack-space-4">
+        <img class="app-icon" src="../assets/success-icon.svg" />
+      </div>
+      <h1 v-if="message" id="text" class="text-center">{{ message }}</h1>
+      <span v-if="desc" id="text" class="text-center">{{ desc }}</span>
     </div>
     <div v-else class="stack stack-space-4">
       <img class="app-icon" src="../assets/error-icon.svg" />
@@ -29,6 +36,9 @@ import { ref, onMounted } from 'vue'
 import type { Ref } from 'vue'
 import { useRoute } from 'vue-router'
 
+let loading = ref(true)
+let message = ref('')
+let desc = ref('Starting login...')
 let err = ref('')
 let parentUrl = ''
 let theme = 'dark'
@@ -88,9 +98,18 @@ onMounted(async () => {
       if (params.email) {
         sessionId = params.sessionId
         setToken = params.setToken
-        const url = await c.triggerPasswordlessLogin(params.email)
-        replyToOpener({ status: 'done' })
-        redirect(url)
+        let success = false
+        try {
+          await c.triggerPasswordlessLogin(params.email)
+          loading.value = false
+          message.value = 'Email sent'
+          desc.value = "Check your inbox and click on the link to login"
+        } catch (e) {
+          err.value = e as string
+          loading.value = false
+        } finally {
+          replyToOpener({ status: 'done', success, error: err.value })
+        }
       } else {
         err.value = 'Email not available for login with link'
       }
