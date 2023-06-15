@@ -8,15 +8,21 @@
 <a title="MIT License" href="https://github.com/arcana-network/license/blob/main/LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue"/></a>
 <a title="Beta release" href="https://github.com/arcana-network/auth-verify/releases"><img src="https://img.shields.io/github/v/release/arcana-network/auth-verify?style=flat-square&color=28A745"/></a>
 <a title="Twitter" href="https://twitter.com/ArcanaNetwork"><img alt="Twitter URL" src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2FArcanaNetwork"/></a>
+<!---
 <a title="CodeCov" href="https://codecov.io/gh/arcana-network/auth-verify"> 
  <img src="https://codecov.io/gh/arcana-network/auth-verify/branch/dev/graph/badge.svg?token=KmdjEs3enL"/></a>
+-->
 </p><p id="start" align="center">
 <a href="https://docs.beta.arcana.network/"><img src="https://raw.githubusercontent.com/arcana-network/branding/main/an_banner_docs.png" alt="Arcana Auth Verify"/></a>
 </p>
 
 # Arcana Auth Verify
 
-The Arcana Auth Verify is a Vue based UI that is part of the Arcana Auth product. Auth Verify works in tandem with the Arcana Auth SDK on the client side. It provides functionality to verify the user within the Web3 app context using the onboarding option enabled by the app developer. Once the user logs in successfully, Auth-Verify securely fetches the key shares from Arcana's ADKG subsystem and assembles them locally. Only the authenticated user can access the key and use it to sign blockchain transactions via the Arcana wallet UI. In addition, it also implements the MFA feature and assists in restoring the user's identity share across devices for enhanced wallet security.
+The Arcana Auth Verify is a Vue-based UI that is part of the Arcana Auth product. Auth Verify works in tandem with the Arcana Auth SDK on the client side. The `auth-verify` repo implements a wrapper that is used for the user authentication redirect page handling. 
+
+When a user logs in to a Web3 app that is integrated with the Arcana Auth SDK through passwordless or social logins, a user verification UI is displayed once the authentication provider successfully processes the user login and redirects to `auth-verify` link. Auth Verify then passes on the verified user's parameters to the Arcana Wallet UI frame and securely fetches the key shares from the Arcana ADKG subsystem. These key shares are assembled within the Web3 app and Arcana Wallet UI context to generate the user's key for signing blockchain transactions.
+
+In addition, Auth Verify also implements the MFA feature and assists in restoring the user's identity share across devices for enhanced wallet security.
 
 ## 🏗️ Auth Verify Developer Guide
 
