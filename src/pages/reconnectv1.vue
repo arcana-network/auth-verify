@@ -48,6 +48,9 @@ export default {
           },
           requestExit () {
             window.close()
+          },
+          reportError (msg: string) {
+            err.value = msg
           }
         }
       }).promise
