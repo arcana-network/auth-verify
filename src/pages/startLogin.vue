@@ -17,7 +17,7 @@
 </template>
 <script lang="ts" setup>
 import Loading from '../components/loadingSpinner.vue'
-import { encodeJSON, getClientStorageKey } from '../helpers/utils'
+import { encodeJSON, getClientStorageKey } from '@/helpers/utils'
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
