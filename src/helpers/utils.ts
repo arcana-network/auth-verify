@@ -49,5 +49,5 @@ export function redirect(url: string) {
   setTimeout(() => (window.location.href = url))
 }
 
-export type ClientKey = 'rn' | 'flutter' | 'unity'
-export const CLIENT_STORAGE_KEY: ClientKey = 'rn'
+export type ClientValue = 'rn' | 'flutter' | 'unity'
+export const getClientStorageKey = (id: string) => `${id}-loginSrc`
