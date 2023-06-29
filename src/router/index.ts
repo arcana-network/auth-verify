@@ -6,7 +6,7 @@ import VerifyPage from '../pages/verifyLogin.vue'
 import WalletPage from '../pages/walletView.vue'
 import MFASetup from '../pages/mfaSetup.vue'
 import MFARestore from '../pages/mfaRestore.vue'
-import ReconnectV1 from "@/pages/reconnectv1.vue";
+import ReconnectV1 from '../pages/reconnectv1.vue'
 
 const router = createRouter({
   history: createWebHistory(),
