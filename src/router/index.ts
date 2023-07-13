@@ -6,6 +6,7 @@ import VerifyPage from '../pages/verifyLogin.vue'
 import WalletPage from '../pages/walletView.vue'
 import MFASetup from '../pages/mfaSetup.vue'
 import MFARestore from '../pages/mfaRestore.vue'
+import ReconnectV1 from '../pages/reconnectv1.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/wallet/:id',
       name: 'wallet',
       component: WalletPage
+    },
+    {
+      path: '/v1/reconnect/:id',
+      name: 'reconnectv1',
+      component: ReconnectV1
     }
   ]
 })
