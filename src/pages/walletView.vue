@@ -52,6 +52,7 @@ onMounted(async () => {
       document.body.className = 'dark-opacity'
     }
     auth.showWallet()
+    const user = auth.getUser()
     if (client == 'rn') {
       const { respond, destroy } = ReactNativeHandler(auth)
       respondHandler = respond
@@ -65,7 +66,7 @@ onMounted(async () => {
       respondHandler = respond
       removeHandler = destroy
     }
-    respondHandler(null, "login_complete")
+    respondHandler(user, "login_complete")
   })
   auth.provider.on('disconnect', () => {
     respondHandler(null, "logout_complete")
