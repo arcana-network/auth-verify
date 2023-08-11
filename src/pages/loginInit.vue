@@ -115,6 +115,7 @@ onMounted(async () => {
       }
     } else {
       const url = await c.triggerSocialLogin(params.loginType)
+        ; (window as any).vuplex?.postMessage(JSON.stringify({ "type": "login_screen" }))
       redirect(url)
     }
   } catch (e) {
