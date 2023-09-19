@@ -9,10 +9,10 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Content-Security-Policy = '''
-      font-src 'self' fonts.gstatic.com gstatic.com *.gstatic.com;
-      script-src 'self' https://*.cloudfront.net *.googletagmanager.com;
-      style-src 'self' 'unsafe-inline' https://*.cloudfront.net https://fonts.googleapis.com;
-      frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network https://deploy-preview-466--wallet-dev.netlify.app;
+      font-src 'self' https://*.netlify.app fonts.gstatic.com gstatic.com *.gstatic.com;
+      script-src 'self' https://*.cloudfront.net https://*.netlify.app *.googletagmanager.com;
+      style-src 'self' 'unsafe-inline' https://*.netlify.app https://*.cloudfront.net https://fonts.googleapis.com;
+      frame-src *.netlify.app https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network https://deploy-preview-466--wallet-dev.netlify.app;
       frame-ancestors 'self';
     '''
 
@@ -22,10 +22,10 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Content-Security-Policy = '''
-      font-src self fonts.gstatic.com gstatic.com *.gstatic.com;
-      script-src 'self' https://*.cloudfront.net *.googletagmanager.com;;
-      style-src 'self' 'unsafe-inline' https://*.cloudfront.net https://fonts.googleapis.com;
-      frame-src https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network https://deploy-preview-466--wallet-dev.netlify.app;
+      font-src self fonts.gstatic.com https://*.netlify.app gstatic.com *.gstatic.com;
+      script-src 'self' https://*.netlify.app https://*.cloudfront.net *.googletagmanager.com;;
+      style-src 'self' 'unsafe-inline' https://*.netlify.app https://*.cloudfront.net https://fonts.googleapis.com;
+      frame-src *.netlify.app https://wallet.arcana.network https://wallet.beta.arcana.network https://wallet.dev.arcana.network https://deploy-preview-466--wallet-dev.netlify.app;
       frame-ancestors 'self';
     '''
     cache-control = "max-age=31536000, immutable"
