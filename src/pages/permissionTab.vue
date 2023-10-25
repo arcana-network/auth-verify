@@ -15,28 +15,41 @@
 
 <script lang="ts" setup>
 import type { Ref } from 'vue'
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { connectToChild } from 'penpal'
 
 const baseUrl = import.meta.env?.VITE_WALLET_URL || 'http://localhost:3000'
 let err = ref('')
 let iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
 
 onMounted(async () => {
-    const route = useRoute()
-    const hash = route.hash
-    if (!hash) {
-        // TODO: send back error to close
-        err.value = 'Invalid params'
-        return
+  const route = useRoute()
+  const hash = route.hash
+  if (!hash) {
+    // TODO: send back error to close
+    err.value = 'Invalid params'
+    return
+  }
+  const url = new URL('/permission/', baseUrl)
+  url.hash = hash
+  if (!iframeRef.value) {
+    err.value = 'could not load wallet'
+    return
+  }
+  iframeRef.value.src = url.toString()
+
+  await connectToChild({
+    iframe: iframeRef.value,
+    methods: {
+      accept() {
+        window.opener.postMessage({ status: 'accept' }, '*')
+      },
+      reject() {
+        window.opener.postMessage({ status: 'error', error: 'user_deny' }, '*')
+      }
     }
-    const url = new URL('/permission/', baseUrl)
-    url.hash = hash
-    if (!iframeRef.value) {
-        err.value = 'could not load wallet'
-        return
-    }
-    iframeRef.value.src = url.toString()
+  }).promise
 })
 </script>
 
