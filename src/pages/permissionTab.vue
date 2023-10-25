@@ -1,16 +1,16 @@
 <template>
-    <main class="center">
-        <iframe ref="iframeRef" class="full-page-frame" />
-        <div v-if="err" class="stack stack-space-4">
-            <img class="app-icon" src="../assets/error-icon.svg" />
-            <div class="stack stack-space-3">
-                <div class="stack stack-space-1">
-                    <h1 class="text-center">Error</h1>
-                    <h2 id="error-code" class="text-center">{{ err }}</h2>
-                </div>
-            </div>
+  <main class="center">
+    <iframe ref="iframeRef" class="iframe" />
+    <div v-if="err" class="stack stack-space-4">
+      <img class="app-icon" src="../assets/error-icon.svg" />
+      <div class="stack stack-space-3">
+        <div class="stack stack-space-1">
+          <h1 class="text-center">Error</h1>
+          <h2 id="error-code" class="text-center">{{ err }}</h2>
         </div>
-    </main>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script lang="ts" setup>
@@ -40,14 +40,17 @@ onMounted(async () => {
 })
 </script>
 
-<style>
-.full-page-frame {
-    position: fixed;
-    z-index: 10;
-    inset: 0;
-    width: 100%;
-    height: 100vh;
-    height: 100dvh;
-    border: none;
+<style scoped>
+main {
+  background-color: #000;
+  width: 100vw;
+  height: 100vh;
+}
+
+.iframe {
+  width: 330px;
+  height: 590px;
+  border: 1px solid;
+  border-radius: 10px;
 }
 </style>
