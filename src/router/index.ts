@@ -8,6 +8,7 @@ import MFASetup from '../pages/mfaSetup.vue'
 import MFARestore from '../pages/mfaRestore.vue'
 import ReconnectV1 from '../pages/reconnectv1.vue'
 import Permission from '../pages/permissionTab.vue'
+import GlobalRedirect from '../pages/globalRedirect.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -56,6 +57,11 @@ const router = createRouter({
       path: '/permission',
       name: 'permission',
       component: Permission
+    },
+    {
+      path: '/global-redirect',
+      name: 'global-redirect',
+      component: GlobalRedirect
     }
   ]
 })
