@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts" setup>
+import { connectToChild } from 'penpal'
 import type { Ref } from 'vue'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
@@ -22,46 +23,34 @@ const baseUrl = import.meta.env?.VITE_WALLET_URL || 'http://localhost:3000'
 let err = ref('')
 let iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
 
-function sendRequestMessage(data: any) {
-  if (iframeRef.value) {
-    iframeRef.value.contentWindow?.postMessage(
-      {
-        type: 'request',
-        data: { hash: data }
-      },
-      '*'
-    )
-  }
-}
-
-window.addEventListener(
-  'message',
-  (event) => {
-    const { type, data } = event.data
-    if (type === 'request') {
-      const url = new URL(data)
-      const hash = url.hash
-      sendRequestMessage(hash)
-    }
-  },
-  false
-)
-
 onMounted(async () => {
   const route = useRoute()
-  const hash = route.hash
-  if (!hash) {
-    // TODO: send back error to close
-    err.value = 'Invalid params'
-    return
-  }
-  const url = new URL('/permission/', baseUrl)
-  url.hash = hash
+  const url = new URL(`/${route.params.id}/permission/`, baseUrl)
   if (!iframeRef.value) {
     err.value = 'could not load wallet'
     return
   }
   iframeRef.value.src = url.toString()
+
+  const connection = connectToChild<{
+    sendRequest: (req: any) => void
+  }>({
+    iframe: iframeRef.value
+  })
+
+  window.addEventListener(
+    'message',
+    async (event) => {
+      const { type, data } = event.data
+      if (type === 'json_rpc_request') {
+        const con = await connection.promise;
+        con.sendRequest(data);
+      }
+    },
+    false
+  )
+
+  window.opener.postMessage({ type: 'READY_TO_RECEIVE' }, "*")
 })
 </script>
 

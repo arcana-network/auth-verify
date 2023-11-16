@@ -54,7 +54,7 @@ const router = createRouter({
       component: ReconnectV1
     },
     {
-      path: '/permission',
+      path: '/:id/permission',
       name: 'permission',
       component: Permission
     },
