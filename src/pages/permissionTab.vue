@@ -43,14 +43,14 @@ onMounted(async () => {
     async (event) => {
       const { type, data } = event.data
       if (type === 'json_rpc_request') {
-        const con = await connection.promise;
-        con.sendRequest(data);
+        const con = await connection.promise
+        con.sendRequest(data)
       }
     },
     false
   )
 
-  window.opener.postMessage({ type: 'READY_TO_RECEIVE' }, "*")
+  window.opener.postMessage({ type: 'READY_TO_RECEIVE' }, '*')
 })
 </script>
 
