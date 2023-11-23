@@ -14,7 +14,7 @@ let iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
 let loading = ref(true)
 
 onMounted(async () => {
-    const url = new URL(`/global-redirect`, baseUrl);
+    const url = new URL(`/global-redirect/`, baseUrl);
     if (route.query) {
         for (const k of Object.keys(route.query)) {
             url.searchParams.append(k, route.query[k] as string)
