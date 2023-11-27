@@ -18,10 +18,22 @@ import { connectToChild } from 'penpal'
 import type { Ref } from 'vue'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 const baseUrl = import.meta.env?.VITE_WALLET_URL || 'http://localhost:3000'
 let err = ref('')
 let iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
+const toast = useToast()
+
+async function copyToClipboard(value: string) {
+  try {
+    await navigator.clipboard.writeText(value)
+    toast.success('Private Key Copied')
+  } catch (err) {
+    console.log(err)
+    toast.error('Failed to copy')
+  }
+}
 
 onMounted(async () => {
   const route = useRoute()
@@ -45,6 +57,9 @@ onMounted(async () => {
       if (type === 'json_rpc_request') {
         const con = await connection.promise
         con.sendRequest(data)
+      }
+      if (type === 'copy_to_clipboard') {
+        copyToClipboard(data)
       }
     },
     false
