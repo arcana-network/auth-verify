@@ -68,16 +68,17 @@ const getIframeURL = (baseUrl: string, path: string) => {
 }
 
 const setError = (err: Error) => {
-  window.opener?.postMessage({ status: 'error', error: err }, "*")
+  window.opener?.postMessage({ status: 'error', error: err }, '*')
 }
 
 const replyTo = () => {
   recoverySuccess.value = true
-  window.opener?.postMessage({ status: 'success' }, "*")
+  window.opener?.postMessage({ status: 'success' }, '*')
   recoverySuccess.value = true
 }
 </script>
-<style>
+
+<style scoped>
 .full-page-frame {
   position: fixed;
   z-index: 10;
@@ -86,5 +87,6 @@ const replyTo = () => {
   height: 100vh;
   height: 100dvh;
   border: none;
+  z-index: 2147483648;
 }
 </style>
