@@ -85,10 +85,10 @@ body {
   padding-right: 1rem;
 }
 
-main {
-  max-width: 26rem;
-  min-height: 100vh;
+* {
+  background: var(--background-color);
 }
+
 
 pre {
   font-family: var(--font-consolas);
