@@ -59,7 +59,7 @@ const replyTo = (url: string) => {
   }
 }
 </script>
-<style>
+<style scoped>
 .full-page-frame {
   position: fixed;
   z-index: 10;
@@ -68,5 +68,6 @@ const replyTo = (url: string) => {
   height: 100vh;
   height: 100dvh;
   border: none;
+  z-index: 2147483648;
 }
 </style>

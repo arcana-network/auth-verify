@@ -85,14 +85,6 @@ body {
   padding-right: 1rem;
 }
 
-* {
-  background: var(--background-color);
-}
-
-main {
-  max-width: 26rem;
-  min-height: 100vh;
-}
 
 pre {
   font-family: var(--font-consolas);

@@ -7,6 +7,8 @@ import WalletPage from '../pages/walletView.vue'
 import MFASetup from '../pages/mfaSetup.vue'
 import MFARestore from '../pages/mfaRestore.vue'
 import ReconnectV1 from '../pages/reconnectv1.vue'
+import Permission from '../pages/permissionTab.vue'
+import GlobalRedirect from '../pages/globalRedirect.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -50,6 +52,16 @@ const router = createRouter({
       path: '/v1/reconnect/:id',
       name: 'reconnectv1',
       component: ReconnectV1
+    },
+    {
+      path: '/:id/permission',
+      name: 'permission',
+      component: Permission
+    },
+    {
+      path: '/global-redirect',
+      name: 'global-redirect',
+      component: GlobalRedirect
     }
   ]
 })
