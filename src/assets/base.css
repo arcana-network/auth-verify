@@ -85,10 +85,6 @@ body {
   padding-right: 1rem;
 }
 
-* {
-  background: var(--background-color);
-}
-
 
 pre {
   font-family: var(--font-consolas);
