@@ -29,7 +29,12 @@ onMounted(async () => {
     network: import.meta.env.VITE_SELF_ENV,
     alwaysVisible: true
   })
-  const isStandAlone = client === "rn" || client === "flutter" || client === "unity"
+  const isStandAlone =
+    client === "rn" ||
+    client === "flutter" ||
+    client === "unity" ||
+    client === "unity-ws"
+
   if (isStandAlone) {
     const mode = client === "rn" || client === "flutter" ? 1 : 2;
     auth["standaloneMode"](mode, (event: string, data: any) => {
@@ -63,6 +68,10 @@ onMounted(async () => {
       removeHandler = destroy
     } else if (client == 'unity') {
       const { respond, destroy } = UnityHandler(auth)
+      respondHandler = respond
+      removeHandler = destroy
+    } else if (client == 'unity-ws') {
+      const { respond, destroy } = UnityWSHandler(auth)
       respondHandler = respond
       removeHandler = destroy
     }
@@ -112,6 +121,28 @@ const UnityHandler = (auth: AuthProvider) => {
     }
     console.log({ response: data })
       ; (window as any).vuplex?.postMessage(JSON.stringify(response))
+  }
+  return createWindowListener(auth, respond)
+}
+
+const UnityWSHandler = (auth: AuthProvider) => {
+  const ws = new WebSocket("ws://localhost:34556")
+  const respond = async (data: any, type = 'response') => {
+    const response: { type: string, data?: any } = { type };
+    if (data) {
+      response.data = data;
+    }
+    console.log({ response: data })
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify(response))
+    } else {
+      await new Promise((resolve) => {
+        ws.onopen = () => {
+          ws.send(JSON.stringify(response))
+          resolve(null)
+        }
+      })
+    }
   }
   return createWindowListener(auth, respond)
 }

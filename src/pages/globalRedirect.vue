@@ -3,6 +3,7 @@ import type { Ref } from 'vue'
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { connectToChild } from 'penpal'
+import Loading from '../components/loadingSpinner.vue'
 
 const router = useRouter()
 const baseUrl = import.meta.env?.VITE_WALLET_URL || 'http://localhost:3000'
@@ -14,6 +15,7 @@ let iframeRef: Ref<HTMLIFrameElement | undefined> = ref()
 let loading = ref(true)
 
 onMounted(async () => {
+    document.body.className = 'dark'
     const url = new URL(`/global-redirect/`, baseUrl);
     if (route.query) {
         for (const k of Object.keys(route.query)) {
