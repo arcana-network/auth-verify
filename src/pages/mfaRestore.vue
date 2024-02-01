@@ -52,7 +52,9 @@ onMounted(async () => {
       replyTo,
       error: setError,
       redirect,
-      goToWallet
+      goToWallet,
+      setSuccess: replyTo,
+      setError: setError
     }
   }).promise
 })
