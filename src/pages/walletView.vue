@@ -23,12 +23,12 @@ const id = useRoute().params.id as string
 let client: ClientValue = localStorage.getItem(getClientStorageKey(id)) as (ClientValue | null) || 'rn'
 let removeHandler: (() => void) | null = null
 let respondHandler: (data: any, type?: string) => void = () => { }
+const auth = new AuthProvider(id, {
+  network: import.meta.env.VITE_SELF_ENV,
+  alwaysVisible: true
+})
 
 onMounted(async () => {
-  const auth = new AuthProvider(id, {
-    network: import.meta.env.VITE_SELF_ENV,
-    alwaysVisible: true
-  })
   const isStandAlone =
     client === "rn" ||
     client === "flutter" ||
@@ -48,6 +48,30 @@ onMounted(async () => {
       }
     })
   }
+  auth.provider.on('accountsChanged', (accounts: string[]) => {
+    respondHandler({
+      type: "accountsChanged",
+      data: accounts,
+    }, "event")
+  })
+  auth.provider.on('chainChanged', (chainID: string) => {
+    respondHandler({
+      type: "chainChanged",
+      data: chainID,
+    }, "event")
+  })
+  auth.provider.on('connect', (chainID: string) => {
+    respondHandler({
+      type: "connect",
+      data: chainID,
+    }, "event")
+  })
+  auth.provider.on('disconnect', () => {
+    respondHandler({
+      type: "disconnect",
+      data: null,
+    }, "event")
+  })
   await auth.init()
   auth.provider.on('connect', async () => {
     loading.value = false
@@ -86,6 +110,7 @@ onUnmounted(() => {
   if (removeHandler) {
     removeHandler()
   }
+  auth.provider.removeAllListeners()
 })
 
 const ReactNativeHandler = (auth: AuthProvider) => {
