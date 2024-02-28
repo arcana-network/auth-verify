@@ -89,29 +89,22 @@ onMounted(async () => {
       getParentUrl: () => parentUrl,
       error: (error: string) => (err.value = error),
       getPasswordlessParams: getPasswordlessParams,
-      getLoginSource: () => loginSrc
+      getLoginSource: () => loginSrc,
+      goTo: (url: string) => redirect(url)
     }
   }).promise
 
   try {
     if (params.loginType === 'passwordless') {
       if (params.email) {
-        sessionId = params.sessionId
-        setToken = params.setToken
-        let success = false
         try {
           await c.triggerPasswordlessLogin(params.email)
-          loading.value = false
-          message.value = 'Email sent'
-          desc.value = "Check your inbox and click on the link to login"
         } catch (e) {
           err.value = e as string
           loading.value = false
-        } finally {
-          replyToOpener({ status: 'done', success, error: err.value })
         }
       } else {
-        err.value = 'Email not available for login with link'
+        err.value = 'Email not available for login with OTP'
       }
     } else {
       const url = await c.triggerSocialLogin(params.loginType)
