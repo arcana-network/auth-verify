@@ -19,6 +19,10 @@
   --space-3: 30px;
   --space-4: 40px;
   --space-5: 50px;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 .dark {
