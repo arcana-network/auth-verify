@@ -38,18 +38,17 @@ onMounted(() => {
   localStorage.setItem(getClientStorageKey(id), loginSrc)
 
   const appId = clientId.split('_')[2]
-  if (loginType == 'passwordless') {
-    err.value = 'Not yet implemented'
+  if (loginType == 'passwordless' && !email) {
+    err.value = 'email is missing'
     return
-    //   this.auth.loginWithLink(email);
-  } else {
-    constructUrl({
-      loginSrc,
-      loginType,
-      appId,
-      parentUrl: window.location.href
-    })
   }
+  constructUrl({
+    loginSrc,
+    loginType,
+    appId,
+    parentUrl: window.location.href,
+    email
+  })
 })
 
 const constructUrl = ({
@@ -57,20 +56,23 @@ const constructUrl = ({
   appId,
   parentUrl,
   loginSrc,
-  theme
+  theme,
+  email
 }: {
   loginType: string
   appId: string
   parentUrl: string
   loginSrc: string
   theme?: string
+  email?: string
 }) => {
   const hash = encodeJSON({
     loginType,
     appId,
     parentUrl,
     theme: 'dark',
-    loginSrc
+    loginSrc,
+    email
   })
 
   useRouter().push({
