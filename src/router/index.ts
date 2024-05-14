@@ -9,6 +9,7 @@ import MFARestore from '../pages/mfaRestore.vue'
 import ReconnectV1 from '../pages/reconnectv1.vue'
 import Permission from '../pages/permissionTab.vue'
 import GlobalRedirect from '../pages/globalRedirect.vue'
+import TransakRedirect from '@/pages/transakRedirect.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -62,6 +63,11 @@ const router = createRouter({
       path: '/global-redirect',
       name: 'global-redirect',
       component: GlobalRedirect
+    },
+    {
+      path: '/:id/sell/transak',
+      name: 'Transak Sell',
+      component: TransakRedirect
     }
   ]
 })
